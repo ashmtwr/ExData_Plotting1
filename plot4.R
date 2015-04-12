@@ -12,7 +12,7 @@ if(!file.exists("./data/exdata-data-household_power_consumption.zip")){
 }
 
 filename <- "./data/household_power_consumption.txt"
-        
+
 df <- read.table(filename,header=TRUE,sep=";",colClasses=c("character","character",rep("numeric",7)),na="?")
 
 df$Time <- strptime(paste(df$Date, df$Time), "%d/%m/%Y %H:%M:%S")
@@ -25,15 +25,29 @@ df <- subset(df, Date %in% dates)
 
 # Following block of code creates the graph using base package
 
-png("plot1.png", width=400, height=400)
+png("plot4.png", width=400, height=400)
 
-hist(df$Global_active_power,
-     main="Global Active Power",
-     xlab="Global Active Power (kilowatts)",
-     ylab="Frequency",
-     col="red")
+par(mfrow=c(2,2)) # Define frame to accommodate 4 groups
+par(mar=c(4,4,2,2))
+# First Graph
+plot(df$Time, df$Global_active_power,
+     type="l",
+     xlab="",
+     ylab="Global Active Power")
+# Second Graph
+plot(df$Time, df$Voltage, type="l",
+     xlab="datetime", ylab="Voltage")
+# Third Graph
+plot(df$Time, df$Sub_metering_1, type="l", col="black",
+     xlab="", ylab="Energy sub metering")
+lines(df$Time, df$Sub_metering_2, col="red")
+lines(df$Time, df$Sub_metering_3, col="blue")
+legend("topright", col=c("black", "red", "blue"),c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"),
+       lty=1,border="white",
+       box.lwd=0)
+# Fourth Graph
+plot(df$Time, df$Global_reactive_power, type="n",
+     xlab="datetime", ylab="Global_reactive_power")
+lines(df$Time, df$Global_reactive_power)
 
 dev.off()
-
-
-

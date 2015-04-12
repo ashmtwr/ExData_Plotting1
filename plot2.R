@@ -12,7 +12,7 @@ if(!file.exists("./data/exdata-data-household_power_consumption.zip")){
 }
 
 filename <- "./data/household_power_consumption.txt"
-        
+
 df <- read.table(filename,header=TRUE,sep=";",colClasses=c("character","character",rep("numeric",7)),na="?")
 
 df$Time <- strptime(paste(df$Date, df$Time), "%d/%m/%Y %H:%M:%S")
@@ -25,15 +25,11 @@ df <- subset(df, Date %in% dates)
 
 # Following block of code creates the graph using base package
 
-png("plot1.png", width=400, height=400)
+png("plot2.png", width=400, height=400)
 
-hist(df$Global_active_power,
-     main="Global Active Power",
-     xlab="Global Active Power (kilowatts)",
-     ylab="Frequency",
-     col="red")
+plot(df$Time, df$Global_active_power,
+     type="l",
+     xlab="Weekday",
+     ylab="Global Active Power (kilowatts)")
 
 dev.off()
-
-
-
